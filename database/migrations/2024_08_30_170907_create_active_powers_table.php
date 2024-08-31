@@ -26,7 +26,7 @@ return new class extends Migration
             $table->float("active_power_11")->nullable();
             $table->float("active_power_12")->nullable();
             $table->float("active_power_13")->nullable();
-            $table->dateTime("terminal_time");
+            $table->dateTime("terminal_time")->nullable();
 
             $table->timestamps();
         });
