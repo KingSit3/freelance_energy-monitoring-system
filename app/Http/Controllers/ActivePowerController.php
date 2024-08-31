@@ -10,7 +10,19 @@ class ActivePowerController extends Controller
 {
     public function show($id)
     {
-        $data = [];
+        $getActivePower = ActivePower::select(["id", "terminal_time", "created_at", "updated_at", "active_power_$id as active_power"])->latest()->limit(24)->get();
+
+        // Chart Data
+        $chartLabels = collect($getActivePower)->pluck("created_at")->map(fn($item) => Carbon::parse($item)->format('H:i:s'));
+        $chartData = collect($getActivePower)->pluck("active_power");
+        // End Chart Data
+
+        $data = [
+            "active_power" => $getActivePower,
+            "title" => "sensor $id",
+            "chart_labels" => $chartLabels,
+            "chart_data" => $chartData,
+        ];
 
         return view("active-power", $data);
     }
@@ -57,6 +69,15 @@ class ActivePowerController extends Controller
 
         return response([
             "active_power" => $resultActivePowers,
+            "chart_labels" => Carbon::parse($getActivePower["created_at"])->format('H:i:s')
+        ]);
+    }
+
+    public function getOneActivePower($id)
+    {
+        $getActivePower = ActivePower::select(["id", "terminal_time", "created_at", "updated_at", "active_power_$id as active_power"])->latest()->first();
+        return response([
+            "active_power" => $getActivePower,
             "chart_labels" => Carbon::parse($getActivePower["created_at"])->format('H:i:s')
         ]);
     }
