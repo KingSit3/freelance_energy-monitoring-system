@@ -10,15 +10,17 @@ class ActivePowerController extends Controller
 {
     public function show($id)
     {
-        $getActivePower = ActivePower::select(["id", "terminal_time", "created_at", "updated_at", "active_power_$id as active_power"])->latest()->limit(24)->get();
+        $getAllActivePower = ActivePower::select(["id", "terminal_time", "created_at", "updated_at", "active_power_$id as active_power"])->latest()->get();
 
         // Chart Data
-        $chartLabels = collect($getActivePower)->pluck("created_at")->map(fn($item) => Carbon::parse($item)->format('H:i:s'));
-        $chartData = collect($getActivePower)->pluck("active_power");
+        $getLimitedActivePower = collect($getAllActivePower)->take(24);
+        $chartLabels = collect($getLimitedActivePower)->pluck("created_at")->map(fn($item) => Carbon::parse($item)->format('H:i:s'));
+        $chartData = collect($getLimitedActivePower)->pluck("active_power");
         // End Chart Data
 
         $data = [
-            "active_power" => $getActivePower,
+            "limited_active_power" => $getLimitedActivePower,
+            "active_powers" => $getAllActivePower,
             "title" => "sensor $id",
             "chart_labels" => $chartLabels,
             "chart_data" => $chartData,
@@ -76,8 +78,33 @@ class ActivePowerController extends Controller
     public function getOneActivePower($id)
     {
         $getActivePower = ActivePower::select(["id", "terminal_time", "created_at", "updated_at", "active_power_$id as active_power"])->latest()->first();
+        $resultActivePowers = [
+            "id" => $getActivePower["id"],
+            "active_power" => $getActivePower["active_power"],
+            "terminal_time" => $getActivePower["terminal_time"],
+            "created_at" => Carbon::parse($getActivePower["created_at"])->format('Y-m-d H:i:s'),
+            "updated_at" => Carbon::parse($getActivePower["updated_at"])->format('Y-m-d H:i:s'),
+        ];
+
         return response([
-            "active_power" => $getActivePower,
+            "active_power" => $resultActivePowers,
+            "chart_labels" => Carbon::parse($getActivePower["created_at"])->format('H:i:s')
+        ]);
+    }
+
+    public function getHistoryOfOneActivePower($id)
+    {
+        $getActivePower = ActivePower::select(["id", "terminal_time", "created_at", "updated_at", "active_power_$id as active_power"])->latest();
+        $resultActivePowers = [
+            "id" => $getActivePower["id"],
+            "active_power" => $getActivePower["active_power"],
+            "terminal_time" => $getActivePower["terminal_time"],
+            "created_at" => Carbon::parse($getActivePower["created_at"])->format('Y-m-d H:i:s'),
+            "updated_at" => Carbon::parse($getActivePower["updated_at"])->format('Y-m-d H:i:s'),
+        ];
+
+        return response([
+            "active_power" => $resultActivePowers,
             "chart_labels" => Carbon::parse($getActivePower["created_at"])->format('H:i:s')
         ]);
     }

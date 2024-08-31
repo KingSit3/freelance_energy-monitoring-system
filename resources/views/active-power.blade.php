@@ -26,7 +26,7 @@
             <div class="card-body">
               <div class="d-flex">
                 <p class="d-flex flex-column">
-                  <span id="total_active_power" class="text-bold text-lg">{{ $active_power->last()->active_power ? $active_power->last()->active_power . " kW" : "- kW" }}</span>
+                  <span id="total_active_power" class="text-bold text-lg">{{ $limited_active_power->last()->active_power ? $limited_active_power->last()->active_power . " kW" : "- kW" }}</span>
                 </p>
               </div>
               <!-- /.d-flex -->
@@ -38,6 +38,33 @@
           </div>
         </div>
         {{-- End Total Voltage Chart --}}
+
+        {{-- Table --}}
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-body">
+              <table id="datatable" class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>Active Power</th>
+                    <th>Terminal Time</th>
+                    <th>Asia/Jakarta Time</th>
+                  </tr>
+                </thead>
+
+                <tbody id="datatable_body">
+                  @foreach ($active_powers as $item)
+                    <tr>
+                      <td>{{ $item->active_power }}</td>
+                      <td>{{ $item->terminal_time }}</td>
+                      <td>{{ $item->created_at }}</td>
+                    </tr>
+                  @endforeach
+              </table>
+            </div>
+          </div>
+        </div>
+        {{-- End Table --}}
 
       </div>
       <!-- /.row -->
@@ -51,6 +78,16 @@
 
 @section('bottom-script')
 <script>
+  // Datatable
+  var datatableElement = $("#datatable").DataTable({
+    info: false,
+    responsive: true,
+    lengthChange: false,
+    autoWidth: false,
+    // "buttons": ["excel", "pdf"]
+  })
+  // End Datatable
+
   var ticksStyle = {
     fontColor: '#495057',
     fontStyle: 'bold'
@@ -129,6 +166,19 @@
 
         // Update Chart
         maxPowerChart.update()
+
+        // $("#datatable_body").find('tr:last').remove();
+
+        // // datatableElement.row.add([data[0]]))
+        // $("#datatable_body").prepend(
+        //   `
+        //     <tr>
+        //       <td>${result.active_power.active_power}</td>
+        //       <td>${result.active_power.terminal_time}</td>
+        //       <td>${result.active_power.created_at}</td>
+        //     </tr>
+        //   `
+        // );
 
         $('#total_active_power').html(result.active_power.active_power ? `${result.active_power.active_power} kW` : "- kW" ) // Update Active Power
       }
