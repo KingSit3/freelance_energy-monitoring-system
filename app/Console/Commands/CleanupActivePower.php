@@ -6,7 +6,7 @@ use App\Models\ActivePower;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
-class GetActivePower extends Command
+class CleanupActivePower extends Command
 {
     /**
      * The name and signature of the console command.
