@@ -10,7 +10,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $getActivePowers = ActivePower::latest()->limit(12)->get();
+        $getActivePowers = ActivePower::latest()->limit(24)->get();
         $resultActivePowers = collect($getActivePowers)->map(function ($item) {
             return [
                 "id" => $item["id"],
@@ -52,7 +52,6 @@ class DashboardController extends Controller
 
         // Chart Data
         $chartLabels = collect($getActivePowers)->pluck("created_at")->map(fn($item) => Carbon::parse($item)->format('H:i:s'));
-        // End Chart Data
 
         $sensorColors = [
             "#ef4444",
