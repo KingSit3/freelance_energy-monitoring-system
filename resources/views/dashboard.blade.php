@@ -26,7 +26,7 @@
               <div class="d-flex">
                 <p class="d-flex flex-column">
                     <span>Total Active Power</span>
-                    <span id="total_active_power" class="text-bold text-lg">{{ $active_powers[0]["total_active_power"] ? $active_powers[0]["total_active_power"] . " kW" : "- kW" }}</span>
+                    <span id="total_active_power" class="text-bold text-lg">{{ isset($active_powers[0]["total_active_power"]) ? $active_powers[0]["total_active_power"] . " kW" : "- kW" }}</span>
                 </p>
               </div>
               <!-- /.d-flex -->
@@ -41,16 +41,18 @@
 
         {{-- Active Power Card Container --}}
         <div id="active_power_card_container" class="col-lg-12 row">
-          @foreach ($active_powers[0]["data"] as $activePower)
-          <div class="col-lg-2">
-            <div class="card">
-                <div class="card-body">
-                  <h1 class="text-lg text-center text-bold" style="color: {{ $sensor_colors[$loop->index] }} ">Sensor {{ $loop->iteration }}</h1>
-                  <p class="card-text text-bold text-lg text-center" id="active_power_card_value_{{ $loop->index }}">{{ $activePower ? $activePower . " kW" : "-" }} </p>
-                </div>
+          @if (isset($active_powers[0]))
+            @foreach ($active_powers[0]["data"] as $activePower)
+            <div class="col-lg-2">
+              <div class="card">
+                  <div class="card-body">
+                    <h1 class="text-lg text-center text-bold" style="color: {{ $sensor_colors[$loop->index] }} ">Sensor {{ $loop->iteration }}</h1>
+                    <p class="card-text text-bold text-lg text-center" id="active_power_card_value_{{ $loop->index }}">{{ $activePower ? $activePower . " kW" : "-" }} </p>
+                  </div>
+              </div>
             </div>
-          </div>
-          @endforeach
+            @endforeach
+          @endif
         </div>
         {{-- End Active Power Card Container --}}
 
