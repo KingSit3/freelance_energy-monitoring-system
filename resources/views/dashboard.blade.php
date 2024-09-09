@@ -44,12 +44,14 @@
           @if (isset($active_powers[0]))
             @foreach ($active_powers[0]["data"] as $activePower)
             <div class="col-lg-2">
-              <div class="card">
-                  <div class="card-body">
-                    <h1 class="text-lg text-center text-bold" style="color: {{ $sensor_colors[$loop->index] }} ">Sensor {{ $loop->iteration }}</h1>
-                    <p class="card-text text-bold text-lg text-center" id="active_power_card_value_{{ $loop->index }}">{{ $activePower ? $activePower . " kW" : "-" }} </p>
-                  </div>
-              </div>
+              <a href="{{ route('show.active.power', $loop->iteration) }}">
+                <div class="card">
+                    <div class="card-body">
+                      <h1 class="text-lg text-center text-bold" style="color: {{ $sensor_colors[$loop->index] }} ">Sensor {{ $loop->iteration }}</h1>
+                      <p class="card-text text-bold text-lg text-center" id="active_power_card_value_{{ $loop->index }}">{{ $activePower ? $activePower . " kW" : "-" }} </p>
+                    </div>
+                </div>
+              </a>
             </div>
             @endforeach
           @endif
@@ -71,52 +73,39 @@
 
   var sensorColors = @json($sensor_colors)
 
-  var ticksStyle = {
-    fontColor: '#495057',
-    fontStyle: 'bold'
-  }
-
   var maxPowerChartElement = $('#max-power-chart')
   var maxPowerChart = new Chart(maxPowerChartElement, {
+    type: 'line',
     data: {
       labels: @json($chart_labels),
       datasets: generateMaxPowerChartData(@json($active_powers))
     },
     options: {
+      elements: {
+        line: {
+          tension: 0.5,
+        },
+      },
+      radius: 1000,
       maintainAspectRatio: false,
       tooltips: {
-        mode: "index",
-        intersect: true
-      },
-      hover: {
-        mode: "index",
-        intersect: true
-      },
-      legend: {
-        display: false
+        enabled: false
       },
       scales: {
-        yAxes: [{
-          // display: false,
-          gridLines: {
+        x: {
+          title: {
+            display: false,
+            text: 'Month'
+          }
+        },
+        y: {
+          stacked: true,
+          title: {
             display: true,
-            lineWidth: '4px',
-            color: 'rgba(0, 0, 0, .2)',
-            zeroLineColor: 'transparent'
-          },
-          ticks: $.extend({
-            beginAtZero: true,
-            suggestedMax: 200
-          }, ticksStyle)
-        }],
-        xAxes: [{
-          display: true,
-          gridLines: {
-            display: false
-          },
-          ticks: ticksStyle
-        }]
-      }
+            text: 'Value'
+          }
+        }
+      },
     }
   })
   function generateMaxPowerChartData(maxPowerData){
@@ -125,21 +114,21 @@
     for (let maxPowerIndex = 0; maxPowerIndex < maxPowerData[0]["data"].length; maxPowerIndex++) {
       let chartData = []
       for (let dataIndex = 0; dataIndex < maxPowerData.length; dataIndex++) {
-          chartData.push(maxPowerData[dataIndex]["data"][maxPowerIndex])
+        chartData.push(maxPowerData[dataIndex]["data"][maxPowerIndex])
+      }
+      result.push(
+        {
+          data: chartData,
+          label: `Sensor ${maxPowerIndex + 1}`,
+          borderColor: 'transparent',
+          pointBorderColor: 'transparent',
+          pointBackgroundColor: 'transparent',
+          backgroundColor: sensorColors[maxPowerIndex],
+          pointHoverBackgroundColor: 'transparent',
+          pointHoverBorderColor    : 'transparent',
+          fill: true,
         }
-        result.push(
-          {
-            type: 'line',
-            data: chartData,
-            backgroundColor: 'transparent',
-            borderColor: sensorColors[maxPowerIndex],
-            pointBorderColor: sensorColors[maxPowerIndex],
-            pointBackgroundColor: sensorColors[maxPowerIndex],
-            fill: false
-            // pointHoverBackgroundColor: '#007bff',
-            // pointHoverBorderColor    : '#007bff'
-          }
-        )
+      )
     }
 
     return result

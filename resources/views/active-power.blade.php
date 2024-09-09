@@ -88,63 +88,53 @@
   })
   // End Datatable
 
-  var ticksStyle = {
-    fontColor: '#495057',
-    fontStyle: 'bold'
-  }
-
   var maxPowerChartElement = $('#max-power-chart')
   var maxPowerChart = new Chart(maxPowerChartElement, {
+    type: 'line',
     data: {
       labels: @json($chart_labels),
       datasets: [{
-        type: 'line',
         data: @json($chart_data),
-        backgroundColor: 'transparent',
-        borderColor: "#ef4444",
-        pointBorderColor: "#ef4444",
-        pointBackgroundColor: "#ef4444",
-        fill: false
+        borderColor: 'transparent',
+        pointBorderColor: 'transparent',
+        pointBackgroundColor: 'transparent',
+        backgroundColor: "#007bff",
+        pointHoverBackgroundColor: 'transparent',
+        pointHoverBorderColor    : 'transparent',
+        fill: true
         // pointHoverBackgroundColor: '#007bff',
         // pointHoverBorderColor    : '#007bff'
       }]
-      
     },
     options: {
-      maintainAspectRatio: false,
-      tooltips: {
-        mode: "index",
-        intersect: true
-      },
-      hover: {
-        mode: "index",
-        intersect: true
-      },
       legend: {
         display: false
       },
+      elements: {
+        line: {
+          tension: 0.5,
+        },
+      },
+      radius: 1000,
+      maintainAspectRatio: false,
+      tooltips: {
+        enabled: false
+      },
       scales: {
-        yAxes: [{
-          // display: false,
-          gridLines: {
+        x: {
+          title: {
+            display: false,
+            text: 'Month'
+          }
+        },
+        y: {
+          stacked: true,
+          title: {
             display: true,
-            lineWidth: '4px',
-            color: 'rgba(0, 0, 0, .2)',
-            zeroLineColor: 'transparent'
-          },
-          ticks: $.extend({
-            beginAtZero: true,
-            suggestedMax: 200
-          }, ticksStyle)
-        }],
-        xAxes: [{
-          display: true,
-          gridLines: {
-            display: false
-          },
-          ticks: ticksStyle
-        }]
-      }
+            text: 'Value'
+          }
+        }
+      },
     }
   })
 
