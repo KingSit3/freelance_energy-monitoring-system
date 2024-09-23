@@ -43,6 +43,7 @@
         <div class="col-lg-12">
           <div class="card">
             <div class="card-body">
+              <a href="{{ route('export', ['id' => $sensor_id]) }}" class="btn btn-primary col-lg-2">Export</a>
               <table id="datatable" class="table table-bordered table-striped">
                 <thead>
                   <tr>
@@ -51,15 +52,6 @@
                     <th>Asia/Jakarta Time</th>
                   </tr>
                 </thead>
-
-                <tbody id="datatable_body">
-                  @foreach ($active_powers as $item)
-                    <tr>
-                      <td>{{ $item->active_power }}</td>
-                      <td>{{ $item->terminal_time }}</td>
-                      <td>{{ $item->created_at }}</td>
-                    </tr>
-                  @endforeach
               </table>
             </div>
           </div>
@@ -78,16 +70,31 @@
 
 @section('bottom-script')
 <script>
+
   // Datatable
   var datatableElement = $("#datatable").DataTable({
+    processing: true,
+    serverSide: true,
     info: false,
     responsive: true,
     lengthChange: false,
     autoWidth: false,
-    // "buttons": ["excel", "pdf"]
+    filter: false,
+    ajax: {
+        url: "{{ route('datatable.one_active_power', $sensor_id) }}",
+        data: {
+        },
+    },
+    columns: [
+        { data: 'active_power', name: 'active_power'},
+        { data: 'terminal_time', name: 'terminal_time'},
+        { data: 'created_at', name: 'created_at'},
+    ],
+    order: [[2, 'desc']]
   })
   // End Datatable
 
+  // Chart
   var maxPowerChartElement = $('#max-power-chart')
   var maxPowerChart = new Chart(maxPowerChartElement, {
     type: 'line',
@@ -137,8 +144,6 @@
       },
     }
   })
-
-  // Get Active Power Data
   function getOneActivePowerData(){
     $.ajax({
       url: `{{ route('one_active_power', request('id')) }}` ,
@@ -174,7 +179,12 @@
       }
     })
   }
-  setInterval(() => getOneActivePowerData(), 5000) // Refresh date after 5 sec
-  // End Get Active Power Data
+  // End Chart
+
+  setInterval(() => {
+    getOneActivePowerData()
+    datatableElement.ajax.reload(false, false)
+  }, 5000) // Refresh date after 5 sec
+
 </script>
 @endsection

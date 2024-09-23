@@ -40,6 +40,13 @@ class GetActivePower extends Command
                 $mqtt->interrupt();
             }, 0);
 
+            // $mqtt->registerLoopEventHandler(function ($client, $elapsedTime) {
+            //     if ($elapsedTime > 2) {
+            //         echo sprintf("failed to receive message");
+            //         $client->interrupt();
+            //     }
+            // });
+
             $mqtt->loop(true);
             $mqtt->disconnect();
 

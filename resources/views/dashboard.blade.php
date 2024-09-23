@@ -58,6 +58,27 @@
         </div>
         {{-- End Active Power Card Container --}}
 
+        {{-- Table --}}
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-body">
+              <a href="{{ route('export') }}" class="btn btn-primary col-lg-2">Export</a>
+              <table id="datatable" class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    @for ($i = 1; $i < 14; $i++)
+                      <th>Sensor {{ $i }}</th>
+                    @endfor
+                    <th>Terminal Time</th>
+                    <th>Asia/Jakarta Time</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+        {{-- End Table --}}
+
       </div>
       <!-- /.row -->
     </div>
@@ -71,9 +92,9 @@
 @section('bottom-script')
 <script>
 
-  var sensorColors = @json($sensor_colors)
-
-  var maxPowerChartElement = $('#max-power-chart')
+  // Chart
+  var sensorColors = @json($sensor_colors);
+  var maxPowerChartElement = $('#max-power-chart');
   var maxPowerChart = new Chart(maxPowerChartElement, {
     type: 'line',
     data: {
@@ -133,8 +154,6 @@
 
     return result
   }
-
-  // Get Active Power Data
   function getActivePowerData(){
     $.ajax({
       url: "{{ route('active_power') }}" ,
@@ -164,8 +183,46 @@
       }
     })
   }
-  setInterval(() => getActivePowerData(), 5000) // Refresh date after 5 sec
-  // End Get Active Power Data
+  // End Chart
+
+  // Datatable
+  var datatableElement = $("#datatable").DataTable({
+    processing: true,
+    serverSide: true,
+    info: false,
+    responsive: false,
+    lengthChange: false,
+    autoWidth: true,
+    scrollX: true,
+    filter: false,
+    ajax: {
+        url: "{{ route('datatable.active_power') }}",
+    },
+    columns: [
+        { data: 'active_power_1', name: 'active_power_1'},
+        { data: 'active_power_2', name: 'active_power_2'},
+        { data: 'active_power_3', name: 'active_power_3'},
+        { data: 'active_power_4', name: 'active_power_4'},
+        { data: 'active_power_5', name: 'active_power_5'},
+        { data: 'active_power_6', name: 'active_power_6'},
+        { data: 'active_power_7', name: 'active_power_7'},
+        { data: 'active_power_8', name: 'active_power_8'},
+        { data: 'active_power_9', name: 'active_power_9'},
+        { data: 'active_power_10', name: 'active_power_10'},
+        { data: 'active_power_11', name: 'active_power_11'},
+        { data: 'active_power_12', name: 'active_power_12'},
+        { data: 'active_power_13', name: 'active_power_13'},
+        { data: 'terminal_time', name: 'terminal_time'},
+        { data: 'created_at', name: 'created_at'},
+    ],
+    order: [[14, 'desc']]
+  })
+  // End Datatable
+
+  setInterval(() => {
+    getActivePowerData()
+    datatableElement.ajax.reload(false, false)
+  }, 5000) // Refresh date after 5 sec
   
 </script>
 @endsection
