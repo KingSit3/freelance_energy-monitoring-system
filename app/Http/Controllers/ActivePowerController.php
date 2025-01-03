@@ -47,8 +47,6 @@ class ActivePowerController extends Controller
                 $getActivePower["active_power_9"],
                 $getActivePower["active_power_10"],
                 $getActivePower["active_power_11"],
-                $getActivePower["active_power_12"],
-                $getActivePower["active_power_13"],
             ],
             "total_active_power" => array_sum([
                 $getActivePower["active_power_1"],
@@ -62,8 +60,6 @@ class ActivePowerController extends Controller
                 $getActivePower["active_power_9"],
                 $getActivePower["active_power_10"],
                 $getActivePower["active_power_11"],
-                $getActivePower["active_power_12"],
-                $getActivePower["active_power_13"],
             ]),
             "terminal_time" => $getActivePower["terminal_time"],
             "created_at" => Carbon::parse($getActivePower["created_at"]),

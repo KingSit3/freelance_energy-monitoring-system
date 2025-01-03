@@ -210,8 +210,6 @@
         { data: 'active_power_9', name: 'active_power_9'},
         { data: 'active_power_10', name: 'active_power_10'},
         { data: 'active_power_11', name: 'active_power_11'},
-        { data: 'active_power_12', name: 'active_power_12'},
-        { data: 'active_power_13', name: 'active_power_13'},
         { data: 'terminal_time', name: 'terminal_time'},
         { data: 'created_at', name: 'created_at'},
     ],

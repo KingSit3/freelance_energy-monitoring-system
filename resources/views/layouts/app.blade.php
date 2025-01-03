@@ -46,14 +46,14 @@
               <nav class="mt-2">
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                   <li class="nav-item">
-                    <a href="{{ route('dashboard') }}" class="nav-link">
+                    <a href="{{ route('dashboard') }}" class="nav-link {{ url()->current() == route('dashboard') ? 'active' : ''  }}">
                       <i class="nav-icon fas fa-home"></i>
                       <p>
                         Dashboard
                       </p>
                     </a>
                   </li>
-                  <li class="nav-item">
+                  <li class="nav-item {{ str_contains(request()->path(), 'active-power') ? 'menu-open' : '' }}">
                     <a href="" class="nav-link">
                       <i class="nav-icon fas fa-bolt"></i>
                       <p>
@@ -64,13 +64,21 @@
                     <ul class="nav nav-treeview">
                       @for ($i = 1; $i <= 13; $i++)
                       <li class="nav-item">
-                        <a href="{{ route('show.active.power', $i) }}" class="nav-link">
+                        <a href="{{ route('show.active.power', $i) }}" class="nav-link {{ url()->current() == route('show.active.power', $i) ? 'active' : ''  }}">
                           <i class="far fa-circle nav-icon"></i>
                           <p>Active Power {{ $i }}</p>
                         </a>
                       </li>
                       @endfor
                     </ul>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{ route('current-load') }}" class="nav-link {{ url()->current() == route('current-load') ? 'active' : ''  }}">
+                      <i class="nav-icon fas fa-info"></i>
+                      <p>
+                        Current Load
+                      </p>
+                    </a>
                   </li>
                 </ul>
               </nav>

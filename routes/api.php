@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActivePowerController;
+use App\Http\Controllers\CurrentLoadController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,3 +16,5 @@ Route::get('/datatable/active-powers/export', [ActivePowerController::class, 'ex
 
 Route::get('/datatable/active-powers', [ActivePowerController::class, 'getTableDataOfActivePower'])->name("datatable.active_power");
 Route::get('/datatable/active-powers/{id}', [ActivePowerController::class, 'getTableDataOfOneActivePower'])->name("datatable.one_active_power");
+
+Route::get('/latest-current-load', [CurrentLoadController::class, 'getLatestCurrentLoad'])->name("latest_current_load");
