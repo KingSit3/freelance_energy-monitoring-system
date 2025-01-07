@@ -65,7 +65,7 @@
                       </p>
                     </a>
                     <ul class="nav nav-treeview">
-                      @for ($i = 1; $i <= 13; $i++)
+                      @for ($i = 1; $i <= 11; $i++)
                       <li class="nav-item">
                         <a href="{{ route('show.active.power', $i) }}" class="nav-link {{ url()->current() == route('show.active.power', $i) ? 'active' : ''  }}">
                           <i class="far fa-circle nav-icon"></i>
