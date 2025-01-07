@@ -26,7 +26,7 @@
             <div class="card-body">
               <div class="d-flex">
                 <p class="d-flex flex-column">
-                  <span id="total_active_power" class="text-bold text-lg">{{ $limited_active_power->last()->active_power ? $limited_active_power->last()->active_power . " kW" : "- kW" }}</span>
+                  <span id="total_active_power" class="text-bold text-lg">{{ $limited_active_power?->last()?->active_power ? $limited_active_power->last()->active_power . " kW" : "- kW" }}</span>
                 </p>
               </div>
               <!-- /.d-flex -->
