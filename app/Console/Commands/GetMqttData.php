@@ -45,7 +45,7 @@ class GetMqttData extends Command
             }, 0);
 
             $mqtt->registerLoopEventHandler(function ($client, $elapsedTime) {
-                if ($elapsedTime > 5) {
+                if ($elapsedTime > 60) {
                     throw new Exception("Wait Time Exceed!");
                     $client->interrupt();
                 }

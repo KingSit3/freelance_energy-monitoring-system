@@ -219,7 +219,7 @@
   setInterval(() => {
     getOneActivePowerData()
     datatableElement.ajax.reload(false, false)
-  }, 5000) // Refresh date after 5 sec
+  }, 60000) // Refresh date after 60 sec
 
 </script>
 @endsection
