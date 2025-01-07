@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\CurrentLoadExport;
 use App\Models\CurrentLoad;
+use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CurrentLoadController extends Controller
 {
@@ -33,5 +36,14 @@ class CurrentLoadController extends Controller
             "created_at" => $createdAt,
             "updated_at" => $updatedAt,
         ]);
+    }
+
+    public function export(Request $req)
+    {
+        $startDate = $req->get("start_date");
+        $endDate = $req->get("end_date");
+
+        $filename = "current_load.csv";
+        return Excel::download(new CurrentLoadExport($startDate, $endDate),  $filename);
     }
 }

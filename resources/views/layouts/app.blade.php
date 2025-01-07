@@ -20,6 +20,9 @@
         <link rel="stylesheet" href="{{ url('vendor/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
         <link rel="stylesheet" href="{{ url('vendor/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 
+        <!-- daterange picker -->
+        <link rel="stylesheet" href="{{ url('vendor/plugins/daterangepicker/daterangepicker.css') }}">
+
     </head>
     <body class="hold-transition sidebar-mini layout-fixed">
         <div class="wrapper">
@@ -105,6 +108,7 @@
         <script src="{{ url('vendor/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
         <script src="{{ url('vendor/dist/js/adminlte.js') }}"></script>
         <script src="{{ url('vendor/plugins/chart.js/Chart.min.js') }}"></script>
+        <script src="{{ url('vendor/plugins/moment/moment.min.js') }}"></script>
 
         <!-- DataTables  & Plugins -->
         <script src="{{ url('vendor/plugins/datatables/jquery.dataTables.min.js') }}"></script>
@@ -119,6 +123,9 @@
         <script src="{{ url('vendor/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
         <script src="{{ url('vendor/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
         <script src="{{ url('vendor/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+
+        <!-- date-range-picker -->
+        <script src="{{ url('vendor/plugins/daterangepicker/daterangepicker.js') }}"></script>
 
         {{-- Custom Script --}}
         @yield('bottom-script')

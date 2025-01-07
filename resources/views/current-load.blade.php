@@ -22,6 +22,21 @@
 
         {{-- DPM List --}}
         <div class="col-lg-12">
+
+          <!-- Date range -->
+          <div class="form-group row col-lg-12">
+
+            <button onclick="exportData()" class="btn btn-primary col-lg-2" >Export</button>
+
+            <div class="input-group col-lg-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="far fa-clock"></i></span>
+              </div>
+              <input type="text" class="form-control float-right" id="daterange">
+            </div>
+          </div>
+          <!-- End Date range -->
+
           <div class="card">
             <div class="card-body row" id="dpm-contents">
               <div class="text-center col-lg-12">Data Belum tersedia</div>
@@ -82,6 +97,26 @@
     })
   }
   getCurrentLoad()
+
+  // Datetime
+  $('#daterange').daterangepicker({
+    maxDate: new Date(),
+    minDate: moment().subtract(3, 'months').format('YYYY-MM-DD'),
+    locale: {
+      format: 'YYYY-MM-DD'
+    }
+  })
+
+  function exportData() {
+    const dateRange = $('#daterange').val().split(" - ");
+    startDate = dateRange[0];
+    endDate = dateRange[1];
+
+    return window.location = "{{ route('current_load.export') }}?" + $.param({
+            start_date: startDate,
+            end_date: endDate
+        })
+  }
 
   setInterval(() => {
     getCurrentLoad()

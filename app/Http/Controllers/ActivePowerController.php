@@ -14,7 +14,7 @@ class ActivePowerController extends Controller
     public function show($id)
     {
         // Chart Data
-        $getLimitedActivePower = ActivePower::select(["id", "terminal_time", "created_at", "updated_at", "active_power_$id as active_power"])->latest()->limit(24)->get();
+        $getLimitedActivePower = ActivePower::select(["id", "terminal_time", "created_at", "updated_at", "active_power_$id as active_power"])->latest()->limit(60)->get();
         $chartLabels = collect($getLimitedActivePower)->pluck("created_at")->map(fn($item) => Carbon::parse($item)->format('H:i:s'));
         $chartData = collect($getLimitedActivePower)->pluck("active_power");
         // End Chart Data
@@ -122,8 +122,11 @@ class ActivePowerController extends Controller
 
     public function export(Request $req)
     {
-        $sensorId = $req->get("id");
-        $filename = $sensorId ? "Sensor_$sensorId.csv" : "Sensor.csv";
-        return Excel::download(new ActivePowerExport($sensorId),  $filename);
+        $sensorId = $req->get("id", null);
+        $startDate = $req->get("start_date");
+        $endDate = $req->get("end_date");
+
+        $filename = $sensorId ? "active-power_$sensorId.csv" : "active-power.csv";
+        return Excel::download(new ActivePowerExport($sensorId, $startDate, $endDate),  $filename);
     }
 }

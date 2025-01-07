@@ -11,10 +11,14 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 class ActivePowerExport implements FromCollection, WithHeadings, ShouldAutoSize
 {
     public $id = null;
+    public $startDate = null;
+    public $endDate = null;
 
-    public function __construct($id = null)
+    public function __construct($id, $startDate, $endDate)
     {
         $this->id = $id;
+        $this->startDate = $startDate . " 00:00:00";
+        $this->endDate = $endDate . " 23:59:59";
     }
 
     /**
@@ -25,7 +29,10 @@ class ActivePowerExport implements FromCollection, WithHeadings, ShouldAutoSize
         $sensorId = $this->id;
         return ActivePower::when($sensorId, function ($query) use ($sensorId) {
             $query->select(["active_power_$sensorId as active_power", "terminal_time", "created_at"]);
-        })->get()->makeHidden(["id", "updated_at"]);
+        })
+            ->whereBetween("created_at", [$this->startDate, $this->endDate])
+            ->get()
+            ->makeHidden(["id", "updated_at"]);
     }
 
     public function headings(): array
@@ -42,7 +49,7 @@ class ActivePowerExport implements FromCollection, WithHeadings, ShouldAutoSize
                 'Asia/Jakarta Time',
             ];
 
-            for ($i = 13; $i > 0; $i--) {
+            for ($i = 11; $i > 0; $i--) {
                 array_unshift($arrayData, "Active Power $i");
             }
 

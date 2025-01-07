@@ -54,8 +54,6 @@ class GetMqttData extends Command
             $mqtt->loop(true);
             $mqtt->disconnect();
 
-            Log::info($result["01I1"]);
-
             DB::transaction(function () use ($result) {
 
                 ActivePower::create([
@@ -109,8 +107,6 @@ class GetMqttData extends Command
                     "11_2" => abs($result["11I2"]),
                     "11_3" => abs($result["11I3"]),
                 ]);
-
-                DB::commit();
             });
         } catch (\Throwable $th) {
             Log::error($th->getMessage());

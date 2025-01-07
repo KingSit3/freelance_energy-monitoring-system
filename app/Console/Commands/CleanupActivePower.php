@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\ActivePower;
+use App\Models\CurrentLoad;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
@@ -13,14 +14,14 @@ class CleanupActivePower extends Command
      *
      * @var string
      */
-    protected $signature = 'cleanup:active-power';
+    protected $signature = 'cleanup:data';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Delete Old Active Power data';
+    protected $description = 'Delete Old Active Power & Current Load data';
 
     /**
      * Execute the console command.
@@ -28,5 +29,6 @@ class CleanupActivePower extends Command
     public function handle()
     {
         ActivePower::whereDate('created_at', '<', Carbon::today()->subMonths(3)->toDateString())->delete();
+        CurrentLoad::whereDate('created_at', '<', Carbon::today()->subMonths(3)->toDateString())->delete();
     }
 }

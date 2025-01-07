@@ -10,7 +10,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $getActivePowers = ActivePower::latest()->limit(24)->get();
+        $getActivePowers = ActivePower::latest()->limit(60)->get();
         $resultActivePowers = collect($getActivePowers)->map(function ($item) {
             return [
                 "id" => $item["id"],
@@ -26,8 +26,6 @@ class DashboardController extends Controller
                     $item["active_power_9"],
                     $item["active_power_10"],
                     $item["active_power_11"],
-                    $item["active_power_12"],
-                    $item["active_power_13"],
                 ],
                 "total_active_power" => array_sum([
                     $item["active_power_1"],
@@ -41,8 +39,6 @@ class DashboardController extends Controller
                     $item["active_power_9"],
                     $item["active_power_10"],
                     $item["active_power_11"],
-                    $item["active_power_12"],
-                    $item["active_power_13"],
                 ]),
                 "terminal_time" => $item["terminal_time"],
                 "created_at" => Carbon::parse($item["created_at"])->format('Y-m-d H:i:s'),
