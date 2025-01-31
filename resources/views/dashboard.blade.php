@@ -1,54 +1,51 @@
 @extends('layouts.app')
 
 @section('content')
-<!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
-  <!-- Content Header (Page header) -->
+
+  <!-- Title -->
   <div class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">Dashboard</h1>
+          <h1 class="m-0">Data KWH</h1>
         </div><!-- /.col -->
       </div><!-- /.row -->
     </div><!-- /.container-fluid -->
   </div>
-  <!-- /.content-header -->
 
   <!-- Main content -->
   <div class="content">
     <div class="container-fluid">
       <div class="row align-middle">
-        {{-- Total Voltage Chart --}}
+
+        {{-- Max Power Total & Chart --}}
         <div class="col-lg-12">
           <div class="card">
             <div class="card-body">
               <div class="d-flex">
                 <p class="d-flex flex-column">
-                    <span>Total Active Power</span>
-                    <span id="total_active_power" class="text-bold text-lg">{{ isset($active_powers[0]["total_active_power"]) ? $active_powers[0]["total_active_power"] . " kW" : "- kW" }}</span>
+                    <span>Total KWH</span>
+                    <span id="total" class="text-bold text-lg">{{ isset($data[0]["total"]) ? $data[0]["total"] . " kW" : "- kW" }}</span>
                 </p>
               </div>
-              <!-- /.d-flex -->
-
               <div class="position-relative mb-4">
                 <canvas id="max-power-chart" height="600"></canvas>
               </div>
             </div>
           </div>
         </div>
-        {{-- End Total Voltage Chart --}}
 
-        {{-- Active Power Card Container --}}
+        {{-- Card Container --}}
         <div id="active_power_card_container" class="col-lg-12 row">
-          @if (isset($active_powers[0]))
-            @foreach ($active_powers[0]["data"] as $activePower)
+          @if (isset($data[0]))
+            @foreach ($data[0]["data"] as $totalPower)
             <div class="col-lg-2">
               <a href="{{ route('show.active.power', $loop->iteration) }}">
                 <div class="card">
                     <div class="card-body">
                       <h1 class="text-lg text-center text-bold" style="color: {{ $sensor_colors[$loop->index] }} ">Sensor {{ $loop->iteration }}</h1>
-                      <p class="card-text text-bold text-lg text-center" id="active_power_card_value_{{ $loop->index }}">{{ $activePower ? $activePower . " kW" : "-" }} </p>
+                      <p class="card-text text-bold text-lg text-center" id="total-power-card-value-{{ $loop->index }}">{{ $totalPower ? $totalPower . " kWH" : "-" }} </p>
                     </div>
                 </div>
               </a>
@@ -56,7 +53,6 @@
             @endforeach
           @endif
         </div>
-        {{-- End Active Power Card Container --}}
 
         {{-- Table --}}
         <div class="col-lg-12">
@@ -91,7 +87,6 @@
             </div>
           </div>
         </div>
-        {{-- End Table --}}
 
       </div>
       <!-- /.row -->
@@ -113,7 +108,7 @@
     type: 'line',
     data: {
       labels: @json($chart_labels),
-      datasets: generateMaxPowerChartData(@json($active_powers))
+      datasets: generateMaxPowerChartData(@json($data))
     },
     options: {
       elements: {
@@ -176,7 +171,7 @@
         result.active_power.data.forEach((activePower, index) => {
           
           // Manipulate Active Power Cards
-          $(`#active_power_card_value_${index}`).html(activePower ? activePower + " kW" : '-' )
+          $(`#total-power-card-value-${index}`).html(activePower ? activePower + " kW" : '-' )
           // End Manipulate Active Power Cards
 
           // Manipulate Chart Data
@@ -193,7 +188,7 @@
         // Update Chart
         maxPowerChart.update()
 
-        $('#total_active_power').html(result.active_power.total_active_power ? `${result.active_power.total_active_power} kW` : "- kW" ) // Update Total
+        $('#total').html(result.active_power.total ? `${result.active_power.total} kW` : "- kW" ) // Update Total
       }
     })
   }
@@ -234,17 +229,17 @@
         url: "{{ route('datatable.active_power') }}",
     },
     columns: [
-        { data: 'active_power_1', name: 'active_power_1'},
-        { data: 'active_power_2', name: 'active_power_2'},
-        { data: 'active_power_3', name: 'active_power_3'},
-        { data: 'active_power_4', name: 'active_power_4'},
-        { data: 'active_power_5', name: 'active_power_5'},
-        { data: 'active_power_6', name: 'active_power_6'},
-        { data: 'active_power_7', name: 'active_power_7'},
-        { data: 'active_power_8', name: 'active_power_8'},
-        { data: 'active_power_9', name: 'active_power_9'},
-        { data: 'active_power_10', name: 'active_power_10'},
-        { data: 'active_power_11', name: 'active_power_11'},
+        { data: '01kWH', name: '01kWH'},
+        { data: '02kWH', name: '02kWH'},
+        { data: '03kWH', name: '03kWH'},
+        { data: '04kWH', name: '04kWH'},
+        { data: '05kWH', name: '05kWH'},
+        { data: '06kWH', name: '06kWH'},
+        { data: '07kWH', name: '07kWH'},
+        { data: '08kWH', name: '08kWH'},
+        { data: '09kWH', name: '09kWH'},
+        { data: '10kWH', name: '10kWH'},
+        { data: '11kWH', name: '11kWH'},
         { data: 'terminal_time', name: 'terminal_time'},
         { data: 'created_at', name: 'created_at'},
     ],

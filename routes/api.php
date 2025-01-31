@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ActivePowerController;
 use App\Http\Controllers\CurrentLoadController;
+use App\Models\Dpm;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -9,10 +10,17 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // })->middleware('auth:sanctum');
 
+// Route::get('/test', function () {
+//   return response(Dpm::select(
+//     [
+//       "payload->030kWh as 01kwh",
+//       "payload->02kWh as 02kwh"
+//     ]
+//   )->get());
+// });
 Route::get('/active-powers', [ActivePowerController::class, 'getActivePower'])->name("active_power");
 Route::get('/active-powers/export', [ActivePowerController::class, 'export'])->name("active_power.export");
 Route::get('/active-powers/{id}', [ActivePowerController::class, 'getOneActivePower'])->name("one_active_power");
-
 
 Route::get('/datatable/active-powers', [ActivePowerController::class, 'getTableDataOfActivePower'])->name("datatable.active_power");
 Route::get('/datatable/active-powers/{id}', [ActivePowerController::class, 'getTableDataOfOneActivePower'])->name("datatable.one_active_power");
