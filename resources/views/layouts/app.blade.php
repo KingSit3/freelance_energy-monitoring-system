@@ -84,10 +84,18 @@
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="{{ route('index.active_power') }}" class="nav-link {{ url()->current() == route('index.active_power') ? 'active' : ''  }}">
+                    <a href="{{ route('active_power') }}" class="nav-link {{ url()->current() == route('active_power') ? 'active' : ''  }}">
                       <i class="nav-icon fas fa-info"></i>
                       <p>
                         Active Power
+                      </p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{ route('index.other') }}" class="nav-link {{ url()->current() == route('index.other') ? 'active' : ''  }}">
+                      <i class="nav-icon fas fa-info"></i>
+                      <p>
+                        Other
                       </p>
                     </a>
                   </li>

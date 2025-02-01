@@ -87,7 +87,7 @@
   // Cards
   function getActivePowerData(){
     $.ajax({
-      url: "{{ route('active_power') }}" ,
+      url: "{{ route('latest_active_power') }}" ,
       success: function(result){
 
         console.log(result.data);

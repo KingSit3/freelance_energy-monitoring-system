@@ -8,5 +8,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [DashboardController::class, 'index'])->name("dashboard");
 Route::get('/max-power/{id}', [MaxPowerController::class, 'show'])->name("show.max_power");
-Route::get('/active-power', [ActivePowerController::class, 'index'])->name("index.active_power");
+Route::get('/active-power', [ActivePowerController::class, 'index'])->name("active_power");
 Route::get('/current-load', [CurrentLoadController::class, 'index'])->name("current_load");
