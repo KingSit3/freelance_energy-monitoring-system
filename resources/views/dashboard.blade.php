@@ -37,15 +37,15 @@
         </div>
 
         {{-- Card Container --}}
-        <div id="active_power_card_container" class="col-lg-12 row">
+        <div id="max_power_card_container" class="col-lg-12 row">
           @if (isset($data[0]))
             @foreach ($data[0]["data"] as $totalPower)
             <div class="col-lg-2">
-              <a href="{{ route('show.active.power', $loop->iteration) }}">
+              <a href="{{ route('show.max_power', $loop->iteration) }}">
                 <div class="card">
                     <div class="card-body">
                       <h1 class="text-lg text-center text-bold" style="color: {{ $sensor_colors[$loop->index] }} ">Sensor {{ $loop->iteration }}</h1>
-                      <p class="card-text text-bold text-lg text-center" id="total-power-card-value-{{ $loop->index }}">{{ $totalPower ? $totalPower . " kWH" : "-" }} </p>
+                      <p class="card-text text-bold text-lg text-center" id="max-power-card-value-{{ $loop->index }}">{{ $totalPower ? $totalPower . " kWH" : "-" }} </p>
                     </div>
                 </div>
               </a>
@@ -105,26 +105,28 @@
   var sensorColors = @json($sensor_colors);
   var maxPowerChartElement = $('#max-power-chart');
   var maxPowerChart = new Chart(maxPowerChartElement, {
-    type: 'line',
+    type: 'bar',
     data: {
       labels: @json($chart_labels),
       datasets: generateMaxPowerChartData(@json($data))
     },
     options: {
-      elements: {
-        line: {
-          tension: 0.5,
-        },
-      },
-      radius: 1000,
+      // elements: {
+      //   line: {
+      //     tension: 0.5,
+      //   },
+      // },
+      // radius: 1000,
       maintainAspectRatio: false,
       tooltips: {
         enabled: false
       },
+      responsive: true,
       scales: {
         x: {
+          stacked: true,
           title: {
-            display: false,
+            display: true,
             text: 'Month'
           }
         },
@@ -163,20 +165,20 @@
 
     return result
   }
-  function getActivePowerData(){
+  function getMaxPowerData(){
     $.ajax({
-      url: "{{ route('active_power') }}" ,
+      url: "{{ route('max_power') }}" ,
       success: function(result){
 
-        result.active_power.data.forEach((activePower, index) => {
+        result.max_power.data.forEach((maxPower, index) => {
           
-          // Manipulate Active Power Cards
-          $(`#total-power-card-value-${index}`).html(activePower ? activePower + " kW" : '-' )
-          // End Manipulate Active Power Cards
+          // Manipulate Cards
+          $(`#max-power-card-value-${index}`).html(maxPower ? maxPower + " kW" : '-' )
+          // End Manipulate Cards
 
           // Manipulate Chart Data
           maxPowerChart.data.datasets[index].data.shift()
-          maxPowerChart.data.datasets[index].data.push(activePower)
+          maxPowerChart.data.datasets[index].data.push(maxPower)
           // End Manipulate Chart Data
         });
         
@@ -188,7 +190,7 @@
         // Update Chart
         maxPowerChart.update()
 
-        $('#total').html(result.active_power.total ? `${result.active_power.total} kW` : "- kW" ) // Update Total
+        $('#total').html(result.max_power.total ? `${result.max_power.total} kW` : "- kW" ) // Update Total
       }
     })
   }
@@ -208,7 +210,7 @@
     startDate = dateRange[0];
     endDate = dateRange[1];
 
-    return window.location = "{{ route('active_power.export') }}?" + $.param({
+    return window.location = "{{ route('max_power.export') }}?" + $.param({
             start_date: startDate,
             end_date: endDate
         })
@@ -226,21 +228,21 @@
     scrollX: true,
     filter: false,
     ajax: {
-        url: "{{ route('datatable.active_power') }}",
+        url: "{{ route('datatable.max_power') }}",
     },
     columns: [
-        { data: '01kWH', name: '01kWH'},
-        { data: '02kWH', name: '02kWH'},
-        { data: '03kWH', name: '03kWH'},
-        { data: '04kWH', name: '04kWH'},
-        { data: '05kWH', name: '05kWH'},
-        { data: '06kWH', name: '06kWH'},
-        { data: '07kWH', name: '07kWH'},
-        { data: '08kWH', name: '08kWH'},
-        { data: '09kWH', name: '09kWH'},
-        { data: '10kWH', name: '10kWH'},
-        { data: '11kWH', name: '11kWH'},
-        { data: 'terminal_time', name: 'terminal_time'},
+        { data: '01kWH', name: '01kWH', defaultContent: 0},
+        { data: '02kWH', name: '02kWH', defaultContent: 0},
+        { data: '03kWH', name: '03kWH', defaultContent: 0},
+        { data: '04kWH', name: '04kWH', defaultContent: 0},
+        { data: '05kWH', name: '05kWH', defaultContent: 0},
+        { data: '06kWH', name: '06kWH', defaultContent: 0},
+        { data: '07kWH', name: '07kWH', defaultContent: 0},
+        { data: '08kWH', name: '08kWH', defaultContent: 0},
+        { data: '09kWH', name: '09kWH', defaultContent: 0},
+        { data: '10kWH', name: '10kWH', defaultContent: 0},
+        { data: '11kWH', name: '11kWH', defaultContent: 0},
+        { data: 'terminal_time', name: 'terminal_time', defaultContent: "-"},
         { data: 'created_at', name: 'created_at'},
     ],
     order: [[12, 'desc']]
@@ -248,7 +250,7 @@
   // End Datatable
 
   setInterval(() => {
-    getActivePowerData()
+    getMaxPowerData()
     datatableElement.ajax.reload(false, false)
   }, 60000) // Refresh date after 60 sec
   

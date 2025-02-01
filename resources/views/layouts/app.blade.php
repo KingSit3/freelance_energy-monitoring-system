@@ -67,7 +67,7 @@
                     <ul class="nav nav-treeview">
                       @for ($i = 1; $i <= 11; $i++)
                       <li class="nav-item">
-                        <a href="{{ route('show.active.power', $i) }}" class="nav-link {{ url()->current() == route('show.active.power', $i) ? 'active' : ''  }}">
+                        <a href="{{ route('show.active_power', $i) }}" class="nav-link {{ url()->current() == route('show.active_power', $i) ? 'active' : ''  }}">
                           <i class="far fa-circle nav-icon"></i>
                           <p>Active Power {{ $i }}</p>
                         </a>
@@ -76,7 +76,7 @@
                     </ul>
                   </li>
                   <li class="nav-item">
-                    <a href="{{ route('current-load') }}" class="nav-link {{ url()->current() == route('current-load') ? 'active' : ''  }}">
+                    <a href="{{ route('current_load') }}" class="nav-link {{ url()->current() == route('current_load') ? 'active' : ''  }}">
                       <i class="nav-icon fas fa-info"></i>
                       <p>
                         Current Load
