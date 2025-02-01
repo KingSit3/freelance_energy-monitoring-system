@@ -11,20 +11,44 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ActivePowerController extends Controller
 {
-    public function show($id)
+    public function index()
     {
         // Chart Data
-        $getLimitedActivePower = Dpm::select(["id", "terminal_time", "created_at", "updated_at", "active_power_$id as active_power"])->latest()->limit(60)->get();
-        $chartLabels = collect($getLimitedActivePower)->pluck("created_at")->map(fn($item) => Carbon::parse($item)->format('H:i:s'));
-        $chartData = collect($getLimitedActivePower)->pluck("active_power");
+        $getActivePower = Dpm::select([
+            "payload->01P_tot as 01P_tot",
+            "payload->02P_tot as 02P_tot",
+            "payload->03P_tot as 03P_tot",
+            "payload->04P_tot as 04P_tot",
+            "payload->05P_tot as 05P_tot",
+            "payload->06P_tot as 06P_tot",
+            "payload->07P_tot as 07P_tot",
+            "payload->08P_tot as 08P_tot",
+            "payload->09P_tot as 09P_tot",
+            "payload->10P_tot as 10P_tot",
+            "payload->11P_tot as 11P_tot",
+        ])->latest()->first();
         // End Chart Data
 
+        $sensorColors = [
+            "#ef4444",
+            "#f97316",
+            "#f59e0b",
+            "#eab308",
+            "#84cc16",
+            "#10b981",
+            "#14b8a6",
+            "#3b82f6",
+            "#8b5cf6",
+            "#d946ef",
+            "#f43f5e",
+            "#3730a3",
+            "#92400e",
+        ];
+
         $data = [
-            "limited_active_power" => $getLimitedActivePower,
-            "title" => "sensor $id",
-            "chart_labels" => $chartLabels,
-            "chart_data" => $chartData,
-            "sensor_id" => $id,
+            "title" => "Active Power",
+            "data" => collect($getActivePower),
+            "sensor_colors" => $sensorColors
         ];
 
         return view("active-power", $data);
@@ -32,92 +56,57 @@ class ActivePowerController extends Controller
 
     public function getActivePower()
     {
-        $getActivePower = Dpm::latest()->first();
-        $resultActivePowers =  [
-            "id" => $getActivePower["id"],
-            "data" => [
-                $getActivePower["active_power_1"],
-                $getActivePower["active_power_2"],
-                $getActivePower["active_power_3"],
-                $getActivePower["active_power_4"],
-                $getActivePower["active_power_5"],
-                $getActivePower["active_power_6"],
-                $getActivePower["active_power_7"],
-                $getActivePower["active_power_8"],
-                $getActivePower["active_power_9"],
-                $getActivePower["active_power_10"],
-                $getActivePower["active_power_11"],
-            ],
-            "total_active_power" => array_sum([
-                $getActivePower["active_power_1"],
-                $getActivePower["active_power_2"],
-                $getActivePower["active_power_3"],
-                $getActivePower["active_power_4"],
-                $getActivePower["active_power_5"],
-                $getActivePower["active_power_6"],
-                $getActivePower["active_power_7"],
-                $getActivePower["active_power_8"],
-                $getActivePower["active_power_9"],
-                $getActivePower["active_power_10"],
-                $getActivePower["active_power_11"],
-            ]),
-            "terminal_time" => $getActivePower["terminal_time"],
-            "created_at" => Carbon::parse($getActivePower["created_at"]),
-            "updated_at" => Carbon::parse($getActivePower["updated_at"]),
-        ];
+        $getActivePower = Dpm::select([
+            "payload->01P_tot as 01P_tot",
+            "payload->02P_tot as 02P_tot",
+            "payload->03P_tot as 03P_tot",
+            "payload->04P_tot as 04P_tot",
+            "payload->05P_tot as 05P_tot",
+            "payload->06P_tot as 06P_tot",
+            "payload->07P_tot as 07P_tot",
+            "payload->08P_tot as 08P_tot",
+            "payload->09P_tot as 09P_tot",
+            "payload->10P_tot as 10P_tot",
+            "payload->11P_tot as 11P_tot",
+        ])->latest()->first();
 
         return response([
-            "active_power" => $resultActivePowers,
-            "chart_labels" => Carbon::parse($getActivePower["created_at"])->format('H:i:s')
+            "data" => collect($getActivePower)->map(fn($item) => abs($item))->flatten()
         ]);
     }
 
     public function getTableDataOfActivePower()
     {
-        return DataTables::eloquent(Dpm::query())->toJson();
-    }
-
-    public function getOneActivePower($id)
-    {
-        $getActivePower = Dpm::select(["id", "terminal_time", "created_at", "updated_at", "active_power_$id as active_power"])->latest()->first();
-        $resultActivePowers = [
-            "id" => $getActivePower["id"],
-            "active_power" => $getActivePower["active_power"],
-            "terminal_time" => $getActivePower["terminal_time"],
-            "created_at" => Carbon::parse($getActivePower["created_at"]),
-            "updated_at" => Carbon::parse($getActivePower["updated_at"]),
-        ];
-
-        return response([
-            "active_power" => $resultActivePowers,
-            "chart_labels" => Carbon::parse($getActivePower["created_at"])->format('H:i:s')
-        ]);
-    }
-
-    public function getTableDataOfOneActivePower($id)
-    {
-        $model = Dpm::query()->select(["id", "terminal_time", "created_at", "active_power_$id as active_power"]);
-
-        return DataTables::eloquent($model)
-            // ->editColumn("created_at", fn($row) => Carbon::parse($row["created_at"])->format('Y-m-d H:i:s'))
+        return DataTables::eloquent(Dpm::query()->select([
+            "id",
+            "payload->01P_tot as 01P_tot",
+            "payload->02P_tot as 02P_tot",
+            "payload->03P_tot as 03P_tot",
+            "payload->04P_tot as 04P_tot",
+            "payload->05P_tot as 05P_tot",
+            "payload->06P_tot as 06P_tot",
+            "payload->07P_tot as 07P_tot",
+            "payload->08P_tot as 08P_tot",
+            "payload->09P_tot as 09P_tot",
+            "payload->10P_tot as 10P_tot",
+            "payload->11P_tot as 11P_tot",
+            "payload->_terminalTime as terminal_time",
+            "created_at",
+            "updated_at",
+        ]))
+            ->editColumn("01P_tot", fn($row) => abs($row["01P_tot"]))
+            ->editColumn("02P_tot", fn($row) => abs($row["02P_tot"]))
+            ->editColumn("03P_tot", fn($row) => abs($row["03P_tot"]))
+            ->editColumn("04P_tot", fn($row) => abs($row["04P_tot"]))
+            ->editColumn("05P_tot", fn($row) => abs($row["05P_tot"]))
+            ->editColumn("06P_tot", fn($row) => abs($row["06P_tot"]))
+            ->editColumn("07P_tot", fn($row) => abs($row["07P_tot"]))
+            ->editColumn("08P_tot", fn($row) => abs($row["08P_tot"]))
+            ->editColumn("09P_tot", fn($row) => abs($row["09P_tot"]))
+            ->editColumn("10P_tot", fn($row) => abs($row["10P_tot"]))
+            ->editColumn("11P_tot", fn($row) => abs($row["11P_tot"]))
+            ->editColumn("terminal_time", fn($row) => Carbon::parse($row["terminal_time"])->format('Y-m-d H:i:s'))
             ->toJson();
-    }
-
-    public function getHistoryOfOneActivePower($id)
-    {
-        $getActivePower = Dpm::select(["id", "terminal_time", "created_at", "updated_at", "active_power_$id as active_power"])->latest();
-        $resultActivePowers = [
-            "id" => $getActivePower["id"],
-            "active_power" => $getActivePower["active_power"],
-            "terminal_time" => $getActivePower["terminal_time"],
-            "created_at" => $getActivePower["created_at"],
-            "updated_at" => $getActivePower["updated_at"],
-        ];
-
-        return response([
-            "active_power" => $resultActivePowers,
-            "chart_labels" => Carbon::parse($getActivePower["created_at"])->format('H:i:s')
-        ]);
     }
 
     public function export(Request $req)

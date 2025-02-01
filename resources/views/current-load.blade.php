@@ -20,7 +20,7 @@
     <div class="container-fluid">
       <div class="row align-middle">
 
-        {{-- DPM List --}}
+        {{-- DPM Card List --}}
         <div class="col-lg-12">
           <div class="card">
             <div class="card-body row" id="dpm-contents">
@@ -123,7 +123,7 @@
 @section('bottom-script')
 <script>
 
-  // Chart
+  // Cards
   function getCurrentLoad(){
     $.ajax({
       url: "{{ route('latest_current_load') }}",
@@ -167,9 +167,6 @@
     processing: true,
     serverSide: true,
     info: false,
-    responsive: {
-      details: false
-    },
     lengthChange: false,
     autoWidth: true,
     scrollX: true,

@@ -83,6 +83,14 @@
                       </p>
                     </a>
                   </li>
+                  <li class="nav-item">
+                    <a href="{{ route('index.active_power') }}" class="nav-link {{ url()->current() == route('index.active_power') ? 'active' : ''  }}">
+                      <i class="nav-icon fas fa-info"></i>
+                      <p>
+                        Active Power
+                      </p>
+                    </a>
+                  </li>
                 </ul>
               </nav>
               <!-- /.sidebar-menu -->
