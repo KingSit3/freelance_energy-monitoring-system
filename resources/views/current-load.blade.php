@@ -22,31 +22,96 @@
 
         {{-- DPM List --}}
         <div class="col-lg-12">
-
-          <!-- Date range -->
-          <div class="form-group row col-lg-12">
-
-            <button onclick="exportData()" class="btn btn-primary col-lg-2" >Export</button>
-
-            <div class="input-group col-lg-3">
-              <div class="input-group-prepend">
-                <span class="input-group-text"><i class="far fa-clock"></i></span>
-              </div>
-              <input type="text" class="form-control float-right" id="daterange">
-            </div>
-          </div>
-          <!-- End Date range -->
-
           <div class="card">
             <div class="card-body row" id="dpm-contents">
               <div class="text-center col-lg-12">Data Belum tersedia</div>
             </div>
           </div>
         </div>
-        {{-- End DPM List --}}
 
+        {{-- Table --}}
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-body">
+
+              <!-- Date range -->
+              <div class="form-group row col-lg-12">
+
+                <button onclick="exportData()" class="btn btn-primary col-lg-2" >Export</button>
+
+                <div class="input-group col-lg-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i class="far fa-clock"></i>
+                    </span>
+                  </div>
+                  <input type="text" class="form-control float-right" id="daterange">
+                </div>
+              </div>
+              <!-- End Date range -->
+  
+              <table id="datatable" class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th colspan="3">DPM 1</th>
+                    <th colspan="3">DPM 2</th>
+                    <th colspan="3">DPM 3</th>
+                    <th colspan="3">DPM 4</th>
+                    <th colspan="3">DPM 5</th>
+                    <th colspan="3">DPM 6</th>
+                    <th colspan="3">DPM 7</th>
+                    <th colspan="3">DPM 8</th>
+                    <th colspan="3">DPM 9</th>
+                    <th colspan="3">DPM 10</th>
+                    <th colspan="3">DPM 11</th>
+                    <th rowspan="2">Terminal Time</th>
+                    <th rowspan="2">Asia/Jakarta Time</th>
+                  </tr>
+                  <tr>
+                    <th>I1</th>
+                    <th>I2</th>
+                    <th>I3</th>
+                    <th>I1</th>
+                    <th>I2</th>
+                    <th>I3</th>
+                    <th>I1</th>
+                    <th>I2</th>
+                    <th>I3</th>
+                    <th>I1</th>
+                    <th>I2</th>
+                    <th>I3</th>
+                    <th>I1</th>
+                    <th>I2</th>
+                    <th>I3</th>
+                    <th>I1</th>
+                    <th>I2</th>
+                    <th>I3</th>
+                    <th>I1</th>
+                    <th>I2</th>
+                    <th>I3</th>
+                    <th>I1</th>
+                    <th>I2</th>
+                    <th>I3</th>
+                    <th>I1</th>
+                    <th>I2</th>
+                    <th>I3</th>
+                    <th>I1</th>
+                    <th>I2</th>
+                    <th>I3</th>
+                    <th>I1</th>
+                    <th>I2</th>
+                    <th>I3</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+        {{-- End Table --}}
       </div>
       <!-- /.row -->
+
+
     </div>
     <!-- /.container-fluid -->
   </div>
@@ -92,11 +157,65 @@
             }
           }
         }
-
       }
     })
   }
   getCurrentLoad()
+
+  // Datatable
+  var datatableElement = $("#datatable").DataTable({
+    processing: true,
+    serverSide: true,
+    info: false,
+    responsive: {
+      details: false
+    },
+    lengthChange: false,
+    autoWidth: true,
+    scrollX: true,
+    filter: false,
+    ajax: {
+        url: "{{ route('datatable.one_current_load') }}",
+    },
+    columns: [
+        { data: '01I1', name: '01I1'},
+        { data: '01I2', name: '01I2'},
+        { data: '01I3', name: '01I3'},
+        { data: '02I1', name: '02I1'},
+        { data: '02I2', name: '02I2'},
+        { data: '02I3', name: '02I3'},
+        { data: '03I1', name: '03I1'},
+        { data: '03I2', name: '03I2'},
+        { data: '03I3', name: '03I3'},
+        { data: '04I1', name: '04I1'},
+        { data: '04I2', name: '04I2'},
+        { data: '04I3', name: '04I3'},
+        { data: '05I1', name: '05I1'},
+        { data: '05I2', name: '05I2'},
+        { data: '05I3', name: '05I3'},
+        { data: '06I1', name: '06I1'},
+        { data: '06I2', name: '06I2'},
+        { data: '06I3', name: '06I3'},
+        { data: '07I1', name: '07I1'},
+        { data: '07I2', name: '07I2'},
+        { data: '07I3', name: '07I3'},
+        { data: '08I1', name: '08I1'},
+        { data: '08I2', name: '08I2'},
+        { data: '08I3', name: '08I3'},
+        { data: '09I1', name: '09I1'},
+        { data: '09I2', name: '09I2'},
+        { data: '09I3', name: '09I3'},
+        { data: '10I1', name: '10I1'},
+        { data: '10I2', name: '10I2'},
+        { data: '10I3', name: '10I3'},
+        { data: '11I1', name: '11I1'},
+        { data: '11I2', name: '11I2'},
+        { data: '11I3', name: '11I3'},
+        { data: 'terminal_time', name: 'terminal_time'},
+        { data: 'created_at', name: 'created_at'},
+    ],
+    order: [[34, 'desc']]
+  })
 
   // Datetime
   $('#daterange').daterangepicker({

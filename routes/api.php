@@ -24,4 +24,6 @@ Route::get('/datatable/active-powers', [ActivePowerController::class, 'getTableD
 Route::get('/datatable/active-powers/{id}', [ActivePowerController::class, 'getTableDataOfOneActivePower'])->name("datatable.one_active_power");
 
 Route::get('/latest-current-load', [CurrentLoadController::class, 'getLatestCurrentLoad'])->name("latest_current_load");
+Route::get('/datatable/current-load', [CurrentLoadController::class, 'getDatatableCurrentLoad'])->name("datatable.one_current_load");
+
 Route::get('/current-load/export', [CurrentLoadController::class, 'export'])->name("current_load.export");

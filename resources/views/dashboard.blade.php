@@ -111,32 +111,23 @@
       datasets: generateMaxPowerChartData(@json($data))
     },
     options: {
-      // elements: {
-      //   line: {
-      //     tension: 0.5,
-      //   },
-      // },
-      // radius: 1000,
       maintainAspectRatio: false,
-      tooltips: {
-        enabled: false
-      },
       responsive: true,
       scales: {
-        x: {
+        xAxes: [{
           stacked: true,
           title: {
             display: true,
             text: 'Month'
           }
-        },
-        y: {
+        }],
+        yAxes: [{
           stacked: true,
           title: {
             display: true,
             text: 'Value'
           }
-        }
+        }]
       },
     }
   })

@@ -8,7 +8,7 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0 text-capitalize">Active Power &bull; {{ $title }}</h1>
+          <h1 class="m-0">Data kWH &bull; {{ $title }}</h1>
         </div><!-- /.col -->
       </div><!-- /.row -->
     </div><!-- /.container-fluid -->
@@ -26,7 +26,7 @@
             <div class="card-body">
               <div class="d-flex">
                 <p class="d-flex flex-column">
-                  <span id="total_active_power" class="text-bold text-lg">{{ $limited_active_power?->last()?->active_power ? $limited_active_power->last()->active_power . " kW" : "- kW" }}</span>
+                  <span id="total_max_power" class="text-bold text-lg">{{ $data?->last()?->data ? $data->last()->data . " kW" : "- kW" }}</span>
                 </p>
               </div>
               <!-- /.d-flex -->
@@ -61,7 +61,7 @@
               <table id="datatable" class="table table-bordered table-striped">
                 <thead>
                   <tr>
-                    <th>Active Power</th>
+                    <th>Max Power</th>
                     <th>Terminal Time</th>
                     <th>Asia/Jakarta Time</th>
                   </tr>
@@ -95,12 +95,10 @@
     autoWidth: false,
     filter: false,
     ajax: {
-        url: "{{ route('datatable.one_active_power', $sensor_id) }}",
-        data: {
-        },
+        url: "{{ route('datatable.one_max_power', $sensor_id) }}",
     },
     columns: [
-        { data: 'active_power', name: 'active_power'},
+        { data: 'data', name: 'max_power'},
         { data: 'terminal_time', name: 'terminal_time'},
         { data: 'created_at', name: 'created_at'},
     ],
@@ -158,14 +156,14 @@
       },
     }
   })
-  function getOneActivePowerData(){
+  function getOneMaxPowerData(){
     $.ajax({
-      url: `{{ route('one_active_power', request('id')) }}` ,
+      url: `{{ route('one_max_power', request('id')) }}` ,
       success: function(result){
 
         // Manipulate Chart Data
         maxPowerChart.data.datasets[0].data.shift()
-        maxPowerChart.data.datasets[0].data.push(result.active_power.active_power)
+        maxPowerChart.data.datasets[0].data.push(result.max_power.data)
         // End Manipulate Chart Data
         
         // Manipulate Chart Label
@@ -176,20 +174,7 @@
         // Update Chart
         maxPowerChart.update()
 
-        // $("#datatable_body").find('tr:last').remove();
-
-        // // datatableElement.row.add([data[0]]))
-        // $("#datatable_body").prepend(
-        //   `
-        //     <tr>
-        //       <td>${result.active_power.active_power}</td>
-        //       <td>${result.active_power.terminal_time}</td>
-        //       <td>${result.active_power.created_at}</td>
-        //     </tr>
-        //   `
-        // );
-
-        $('#total_active_power').html(result.active_power.active_power ? `${result.active_power.active_power} kW` : "- kW" ) // Update Active Power
+        $('#total_max_power').html(result.max_power.data ? `${result.max_power.data} kW` : "- kW" ) // Update Max Power
       }
     })
   }
@@ -209,7 +194,7 @@
     startDate = dateRange[0];
     endDate = dateRange[1];
 
-    return window.location = "{{ route('active_power.export') }}?" + $.param({
+    return window.location = "{{ route('max_power.export') }}?" + $.param({
             id: {{ "$sensor_id" }},
             start_date: startDate,
             end_date: endDate
@@ -217,7 +202,7 @@
   }
 
   setInterval(() => {
-    getOneActivePowerData()
+    getOneMaxPowerData()
     datatableElement.ajax.reload(false, false)
   }, 60000) // Refresh date after 60 sec
 

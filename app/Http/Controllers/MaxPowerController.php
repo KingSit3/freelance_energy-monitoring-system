@@ -22,12 +22,12 @@ class MaxPowerController extends Controller
             "created_at",
             "updated_at",
         ])->latest()->limit(60)->get();
-        $chartLabels = collect($getMaxPowers)->pluck("created_at");
+        $chartLabels = collect($getMaxPowers)->pluck("created_at")->map(fn($item) => Carbon::parse($item)->format('H:i:s'));
         $chartData = collect($getMaxPowers)->pluck("data");
 
         $data = [
             "data" => $getMaxPowers,
-            "title" => "sensor $id",
+            "title" => "DPM $id",
             "chart_labels" => $chartLabels,
             "chart_data" => $chartData,
             "sensor_id" => $id,
@@ -70,7 +70,7 @@ class MaxPowerController extends Controller
                 $getMaxPower["10kWH"],
                 $getMaxPower["11kWH"],
             ],
-            "total_max_power" => array_sum([
+            "total" => array_sum([
                 $getMaxPower["01kWH"],
                 $getMaxPower["02kWH"],
                 $getMaxPower["03kWH"],
@@ -117,27 +117,36 @@ class MaxPowerController extends Controller
 
     public function getOneMaxPower($id)
     {
-        $getMaxPower = Dpm::select(["id", "terminal_time", "created_at", "updated_at", "max_power_$id as max_power"])->latest()->first();
-        $resultMaxPowers = [
-            "id" => $getMaxPower["id"],
-            "max_power" => $getMaxPower["max_power"],
-            "terminal_time" => $getMaxPower["terminal_time"],
-            "created_at" => Carbon::parse($getMaxPower["created_at"]),
-            "updated_at" => Carbon::parse($getMaxPower["updated_at"]),
-        ];
+        $paddedId = str_pad($id, 2, 0, STR_PAD_LEFT);
+
+        $getMaxPower = Dpm::select([
+            "id",
+            "payload->" . $paddedId . "kWh as data",
+            "payload->_terminalTime as terminal_time",
+            "created_at",
+            "updated_at",
+        ])->latest()->first();
 
         return response([
-            "max_power" => $resultMaxPowers,
+            "max_power" => $getMaxPower,
             "chart_labels" => Carbon::parse($getMaxPower["created_at"])->format('H:i:s')
         ]);
     }
 
     public function getTableDataOfOneMaxPower($id)
     {
-        $model = Dpm::query()->select(["id", "terminal_time", "created_at", "max_power_$id as max_power"]);
+        $paddedId = str_pad($id, 2, 0, STR_PAD_LEFT);
+
+        $model = Dpm::query()->select([
+            "id",
+            "payload->" . $paddedId . "kWh as data",
+            "payload->_terminalTime as terminal_time",
+            "created_at",
+            "updated_at",
+        ]);
 
         return DataTables::eloquent($model)
-            ->editColumn("created_at", fn($row) => Carbon::parse($row["created_at"])->format('Y-m-d H:i:s'))
+            // ->editColumn("created_at", fn($row) => Carbon::parse($row["created_at"])->format('Y-m-d H:i:s'))
             ->toJson();
     }
 

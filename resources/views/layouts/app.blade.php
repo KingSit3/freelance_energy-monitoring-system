@@ -56,20 +56,20 @@
                       </p>
                     </a>
                   </li>
-                  <li class="nav-item {{ str_contains(request()->path(), 'active-power') ? 'menu-open' : '' }}">
+                  <li class="nav-item {{ str_contains(request()->path(), 'max-power') ? 'menu-open' : '' }}">
                     <a href="" class="nav-link">
                       <i class="nav-icon fas fa-bolt"></i>
                       <p>
-                        Active Power
+                        Data kWH
                         <i class="fas fa-angle-left right"></i>
                       </p>
                     </a>
                     <ul class="nav nav-treeview">
                       @for ($i = 1; $i <= 11; $i++)
                       <li class="nav-item">
-                        <a href="{{ route('show.active_power', $i) }}" class="nav-link {{ url()->current() == route('show.active_power', $i) ? 'active' : ''  }}">
+                        <a href="{{ route('show.max_power', $i) }}" class="nav-link {{ url()->current() == route('show.max_power', $i) ? 'active' : ''  }}">
                           <i class="far fa-circle nav-icon"></i>
-                          <p>Active Power {{ $i }}</p>
+                          <p>DPM {{ $i }} - kWH</p>
                         </a>
                       </li>
                       @endfor
