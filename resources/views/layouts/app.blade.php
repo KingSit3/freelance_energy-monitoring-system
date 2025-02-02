@@ -92,10 +92,10 @@
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="{{ route('index.other') }}" class="nav-link {{ url()->current() == route('index.other') ? 'active' : ''  }}">
+                    <a href="{{ route('other_power') }}" class="nav-link {{ url()->current() == route('other_power') ? 'active' : ''  }}">
                       <i class="nav-icon fas fa-info"></i>
                       <p>
-                        Other
+                        Other Power
                       </p>
                     </a>
                   </li>

@@ -3,8 +3,7 @@
 use App\Http\Controllers\ActivePowerController;
 use App\Http\Controllers\CurrentLoadController;
 use App\Http\Controllers\MaxPowerController;
-use App\Models\Dpm;
-use Illuminate\Http\Request;
+use App\Http\Controllers\OtherPowerController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/user', function (Request $request) {
@@ -24,3 +23,7 @@ Route::get('/datatable/active-powers', [ActivePowerController::class, 'getTableD
 Route::get('/latest-current-load', [CurrentLoadController::class, 'getLatestCurrentLoad'])->name("latest_current_load");
 Route::get('/datatable/current-load', [CurrentLoadController::class, 'getDatatableCurrentLoad'])->name("datatable.one_current_load");
 Route::get('/current-load/export', [CurrentLoadController::class, 'export'])->name("current_load.export");
+
+Route::get('/latest-other-power', [OtherPowerController::class, 'getLatestOtherPower'])->name("latest_other_power");
+Route::get('/datatable/other-power', [OtherPowerController::class, 'getDatatableData'])->name("datatable.other_power");
+Route::get('/other-power/export', [OtherPowerController::class, 'export'])->name("other_power.export");
