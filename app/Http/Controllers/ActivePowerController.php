@@ -111,11 +111,10 @@ class ActivePowerController extends Controller
 
     public function export(Request $req)
     {
-        $sensorId = $req->get("id", null);
         $startDate = $req->get("start_date");
         $endDate = $req->get("end_date");
 
-        $filename = $sensorId ? "active-power_$sensorId.csv" : "active-power.csv";
-        return Excel::download(new ActivePowerExport($sensorId, $startDate, $endDate),  $filename);
+        $filename = "active-power.csv";
+        return Excel::download(new ActivePowerExport($startDate, $endDate),  $filename);
     }
 }
