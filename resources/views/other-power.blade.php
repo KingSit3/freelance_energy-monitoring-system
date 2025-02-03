@@ -179,10 +179,9 @@
     processing: true,
     serverSide: true,
     info: false,
-    // lengthChange: ,
-    autoWidth: true,
-    // responsive: false,
-    // scrollX: true,
+    autoWidth: false,
+    responsive: false,
+    scrollX: true,
     filter: false,
     ajax: {
         url: "{{ route('datatable.other_power') }}",

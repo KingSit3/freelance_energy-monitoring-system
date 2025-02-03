@@ -28,7 +28,7 @@
             <div class="col-lg-2">
               <div class="card">
                   <div class="card-body">
-                    <h1 class="text-lg text-center text-bold" style="color: {{ $sensor_colors[$loop->index] }} ">Sensor {{ $loop->iteration }}</h1>
+                    <h1 class="text-lg text-center text-bold" style="color: {{ $sensor_colors[$loop->index] }} ">DPM {{ $loop->iteration }}</h1>
                     <p class="card-text text-bold text-lg text-center" id="active_power_card_value_{{ $loop->index }}">{{ $activePower ? abs($activePower) . " kW" : "-" }} </p>
                   </div>
               </div>
@@ -60,7 +60,7 @@
                 <thead>
                   <tr>
                     @for ($i = 1; $i < 12; $i++)
-                      <th>Sensor {{ $i }}</th>
+                      <th>DPM {{ $i }}</th>
                     @endfor
                     <th>Terminal Time</th>
                     <th>Asia/Jakarta Time</th>
@@ -106,7 +106,7 @@
     info: false,
     responsive: false,
     lengthChange: false,
-    autoWidth: true,
+    autoWidth: false,
     scrollX: true,
     filter: false,
     ajax: {

@@ -215,7 +215,7 @@
     info: false,
     responsive: false,
     lengthChange: false,
-    autoWidth: true,
+    autoWidth: false,
     scrollX: true,
     filter: false,
     ajax: {
