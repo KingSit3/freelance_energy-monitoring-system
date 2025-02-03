@@ -44,8 +44,8 @@
               <a href="{{ route('show.max_power', $loop->iteration) }}">
                 <div class="card">
                     <div class="card-body">
-                      <h1 class="text-lg text-center text-bold" style="color: {{ $sensor_colors[$loop->index] }} ">Sensor {{ $loop->iteration }}</h1>
-                      <p class="card-text text-bold text-lg text-center" id="max-power-card-value-{{ $loop->index }}">{{ $totalPower ? $totalPower . " kWH" : "-" }} </p>
+                      <h1 class="text-lg text-center text-bold" style="color: {{ $sensor_colors[$loop->index] }} ">DPM {{ $loop->iteration }}</h1>
+                      <p class="card-text text-bold text-lg text-center" id="max-power-card-value-{{ $loop->index }}">{{ $totalPower ? $totalPower . " kWh" : "-" }} </p>
                     </div>
                 </div>
               </a>
@@ -77,7 +77,7 @@
                 <thead>
                   <tr>
                     @for ($i = 1; $i < 12; $i++)
-                      <th>Sensor {{ $i }}</th>
+                      <th>DPM {{ $i }}</th>
                     @endfor
                     <th>Terminal Time</th>
                     <th>Asia/Jakarta Time</th>
@@ -142,7 +142,7 @@
       result.push(
         {
           data: chartData,
-          label: `Sensor ${maxPowerIndex + 1}`,
+          label: `DPM ${maxPowerIndex + 1}`,
           borderColor: 'transparent',
           pointBorderColor: 'transparent',
           pointBackgroundColor: 'transparent',
@@ -222,17 +222,17 @@
         url: "{{ route('datatable.max_power') }}",
     },
     columns: [
-        { data: '01kWH', name: '01kWH', defaultContent: 0},
-        { data: '02kWH', name: '02kWH', defaultContent: 0},
-        { data: '03kWH', name: '03kWH', defaultContent: 0},
-        { data: '04kWH', name: '04kWH', defaultContent: 0},
-        { data: '05kWH', name: '05kWH', defaultContent: 0},
-        { data: '06kWH', name: '06kWH', defaultContent: 0},
-        { data: '07kWH', name: '07kWH', defaultContent: 0},
-        { data: '08kWH', name: '08kWH', defaultContent: 0},
-        { data: '09kWH', name: '09kWH', defaultContent: 0},
-        { data: '10kWH', name: '10kWH', defaultContent: 0},
-        { data: '11kWH', name: '11kWH', defaultContent: 0},
+        { data: '01kWh', name: '01kWh', defaultContent: 0},
+        { data: '02kWh', name: '02kWh', defaultContent: 0},
+        { data: '03kWh', name: '03kWh', defaultContent: 0},
+        { data: '04kWh', name: '04kWh', defaultContent: 0},
+        { data: '05kWh', name: '05kWh', defaultContent: 0},
+        { data: '06kWh', name: '06kWh', defaultContent: 0},
+        { data: '07kWh', name: '07kWh', defaultContent: 0},
+        { data: '08kWh', name: '08kWh', defaultContent: 0},
+        { data: '09kWh', name: '09kWh', defaultContent: 0},
+        { data: '10kWh', name: '10kWh', defaultContent: 0},
+        { data: '11kWh', name: '11kWh', defaultContent: 0},
         { data: 'terminal_time', name: 'terminal_time', defaultContent: "-"},
         { data: 'created_at', name: 'created_at'},
     ],

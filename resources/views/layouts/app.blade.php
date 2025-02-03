@@ -60,7 +60,7 @@
                     <a href="" class="nav-link">
                       <i class="nav-icon fas fa-bolt"></i>
                       <p>
-                        Data kWH
+                        Data kWh
                         <i class="fas fa-angle-left right"></i>
                       </p>
                     </a>
@@ -69,7 +69,7 @@
                       <li class="nav-item">
                         <a href="{{ route('show.max_power', $i) }}" class="nav-link {{ url()->current() == route('show.max_power', $i) ? 'active' : ''  }}">
                           <i class="far fa-circle nav-icon"></i>
-                          <p>DPM {{ $i }} - kWH</p>
+                          <p>DPM {{ $i }} - kWh</p>
                         </a>
                       </li>
                       @endfor
