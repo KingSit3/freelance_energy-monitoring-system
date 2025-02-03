@@ -4,7 +4,6 @@ namespace App\Exports;
 
 use App\Models\Dpm;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -28,16 +27,16 @@ class MaxPowerExport implements FromCollection, WithHeadings, ShouldAutoSize
      */
     public function collection()
     {
-        $getmaxPower = Dpm::query();
+        $getData = Dpm::query();
 
         if ($this->id) {
             $paddedId = str_pad($this->id, 2, 0, STR_PAD_LEFT);
-            $getmaxPower->select([
+            $getData->select([
                 "payload->" . $paddedId . "kWh as max_power",
                 "payload->_terminalTime as terminal_time",
                 "created_at"
             ]);
-            return collect($getmaxPower->whereBetween("created_at", [$this->startDate, $this->endDate])->get())->map(function ($row) {
+            return collect($getData->whereBetween("created_at", [$this->startDate, $this->endDate])->get())->map(function ($row) {
                 return [
                     $row["max_power"] ?? 0,
                     Carbon::parse($row["terminal_time"])->format('Y-m-d H:i:s') ?? "-",
@@ -45,7 +44,7 @@ class MaxPowerExport implements FromCollection, WithHeadings, ShouldAutoSize
                 ];
             });
         } else {
-            $getmaxPower->select([
+            $getData->select([
                 "payload->01kWh as 01kWh",
                 "payload->02kWh as 02kWh",
                 "payload->03kWh as 03kWh",
@@ -60,7 +59,7 @@ class MaxPowerExport implements FromCollection, WithHeadings, ShouldAutoSize
                 "payload->_terminalTime as terminal_time",
                 "created_at"
             ]);
-            return collect($getmaxPower->whereBetween("created_at", [$this->startDate, $this->endDate])->get())->map(function ($row) {
+            return collect($getData->whereBetween("created_at", [$this->startDate, $this->endDate])->get())->map(function ($row) {
                 return [
                     $row["01kWh"] ?? 0,
                     $row["02kWh"] ?? 0,
