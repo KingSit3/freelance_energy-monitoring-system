@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\ActivePowerExport;
+use App\Exports\OtherPowerExport;
 use App\Models\Dpm;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -80,11 +80,10 @@ class OtherPowerController extends Controller
 
     public function export(Request $req)
     {
-        $sensorId = $req->get("id", null);
         $startDate = $req->get("start_date");
         $endDate = $req->get("end_date");
 
-        $filename = $sensorId ? "active-power_$sensorId.csv" : "active-power.csv";
-        return Excel::download(new ActivePowerExport($sensorId, $startDate, $endDate),  $filename);
+        $filename = "other-power.csv";
+        return Excel::download(new OtherPowerExport($startDate, $endDate),  $filename);
     }
 }

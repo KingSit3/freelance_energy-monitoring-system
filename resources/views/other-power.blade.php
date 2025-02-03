@@ -215,7 +215,7 @@
     startDate = dateRange[0];
     endDate = dateRange[1];
 
-    return window.location = "{{ route('current_load.export') }}?" + $.param({
+    return window.location = "{{ route('other_power.export') }}?" + $.param({
             start_date: startDate,
             end_date: endDate
         })
