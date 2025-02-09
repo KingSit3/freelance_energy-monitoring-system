@@ -237,7 +237,7 @@
   setInterval(() => {
     getCurrentLoad()
     datatableElement.ajax.reload(false, false)
-  }, 60000) // Refresh date after 60 sec
+  }, 1000 * 60 * 30) // Refresh date after 30 min
 
 </script>
 @endsection

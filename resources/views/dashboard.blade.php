@@ -26,7 +26,7 @@
               <div class="d-flex">
                 <p class="d-flex flex-column">
                     <span>Total KWH</span>
-                    <span id="total" class="text-bold text-lg">{{ isset($data[0]["total"]) ? $data[0]["total"] . " kW" : "- kW" }}</span>
+                    <span id="total" class="text-bold text-lg">{{ isset($data["total_power"]) ? $data["total_power"] . " kW" : "- kW" }}</span>
                 </p>
               </div>
               <div class="position-relative mb-4">
@@ -158,7 +158,7 @@
   }
   function getMaxPowerData(){
     $.ajax({
-      url: "{{ route('max_power') }}" ,
+      url: "{{ route('max_power') }}",
       success: function(result){
 
         result.max_power.data.forEach((maxPower, index) => {
@@ -243,7 +243,7 @@
   setInterval(() => {
     getMaxPowerData()
     datatableElement.ajax.reload(false, false)
-  }, 60000) // Refresh date after 60 sec
+  }, 1000 * 60 * 30) // Refresh date after 30 min
   
 </script>
 @endsection

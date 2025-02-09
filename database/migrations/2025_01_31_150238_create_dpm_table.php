@@ -12,9 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('dpm', function (Blueprint $table) {
-            $table->uuid("id");
+            $table->uuid("id")->primary();
             $table->json("payload")->nullable();
             $table->timestamps();
+            $table->index(['created_at']);
         });
     }
 
