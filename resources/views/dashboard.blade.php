@@ -224,8 +224,7 @@
     updateMaxPowerCard()
     updateChartData()
     datatableElement.ajax.reload(false, false)
-  }, 5000) // Refresh date after 30 min
-  // 1000 * 60 * 30
+  }, 1000 * 60 * 30) // Refresh date after 30 min
   
 </script>
 @endsection
