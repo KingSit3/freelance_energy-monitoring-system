@@ -10,10 +10,11 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // })->middleware('auth:sanctum');
 
-Route::get('/max-powers', [MaxPowerController::class, 'getMaxPower'])->name("max_power");
+Route::get('/max-powers', [MaxPowerController::class, 'getLatestMaxPower'])->name("max_power");
 Route::get('/max-powers/export', [MaxPowerController::class, 'export'])->name("max_power.export");
 Route::get('/max-powers/{id}', [MaxPowerController::class, 'getOneMaxPower'])->name("one_max_power");
 Route::get('/datatable/max-powers', [MaxPowerController::class, 'getTableDataOfMaxPower'])->name("datatable.max_power");
+Route::get('/chart/max-powers', [MaxPowerController::class, 'getChartDataOfMaxPower'])->name("chart.max_power");
 Route::get('/datatable/max-powers/{id}', [MaxPowerController::class, 'getTableDataOfOneMaxPower'])->name("datatable.one_max_power");
 
 Route::get('/latest-active-powers', [ActivePowerController::class, 'getActivePower'])->name("latest_active_power");

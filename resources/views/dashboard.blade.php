@@ -11,7 +11,7 @@
           <h1 class="m-0">Data KWH</h1>
         </div><!-- /.col -->
       </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
+    </div>
   </div>
 
   <!-- Main content -->
@@ -38,20 +38,18 @@
 
         {{-- Card Container --}}
         <div id="max_power_card_container" class="col-lg-12 row">
-          @if (isset($data[0]))
-            @foreach ($data[0]["data"] as $totalPower)
-            <div class="col-lg-2">
-              <a href="{{ route('show.max_power', $loop->iteration) }}">
-                <div class="card">
-                    <div class="card-body">
-                      <h1 class="text-lg text-center text-bold" style="color: {{ $sensor_colors[$loop->index] }} ">DPM {{ $loop->iteration }}</h1>
-                      <p class="card-text text-bold text-lg text-center" id="max-power-card-value-{{ $loop->index }}">{{ $totalPower ? $totalPower . " kWh" : "-" }} </p>
-                    </div>
-                </div>
-              </a>
-            </div>
-            @endforeach
-          @endif
+          @foreach ($sensor_colors as $cards)
+          <div class="col-lg-2">
+            <a href="{{ route('show.max_power', $loop->iteration) }}">
+              <div class="card">
+                  <div class="card-body">
+                    <h1 class="text-lg text-center text-bold" style="color: {{ $sensor_colors[$loop->index] }} ">DPM {{ $loop->iteration }}</h1>
+                    <p class="card-text text-bold text-lg text-center" id="max-power-card-value-{{ $loop->index }}">-</p>
+                  </div>
+              </div>
+            </a>
+          </div>
+          @endforeach
         </div>
 
         {{-- Table --}}
@@ -61,9 +59,7 @@
               
               <!-- Date range -->
               <div class="form-group row col-lg-12">
-
                 <button onclick="exportData()" class="btn btn-primary col-lg-2" >Export</button>
-
                 <div class="input-group col-lg-3">
                   <div class="input-group-prepend">
                     <span class="input-group-text"><i class="far fa-clock"></i></span>
@@ -91,11 +87,8 @@
       </div>
       <!-- /.row -->
     </div>
-    <!-- /.container-fluid -->
   </div>
-  <!-- /.content -->
 </div>
-<!-- /.content-wrapper -->
 @endsection
 
 @section('bottom-script')
@@ -106,10 +99,7 @@
   var maxPowerChartElement = $('#max-power-chart');
   var maxPowerChart = new Chart(maxPowerChartElement, {
     type: 'bar',
-    data: {
-      labels: @json($chart_labels),
-      datasets: generateMaxPowerChartData(@json($data))
-    },
+    data: {},
     options: {
       maintainAspectRatio: false,
       responsive: true,
@@ -131,61 +121,51 @@
       },
     }
   })
-  function generateMaxPowerChartData(maxPowerData){
-    let result = []
-
-    for (let maxPowerIndex = 0; maxPowerIndex < maxPowerData[0]["data"].length; maxPowerIndex++) {
-      let chartData = []
-      for (let dataIndex = 0; dataIndex < maxPowerData.length; dataIndex++) {
-        chartData.push(maxPowerData[dataIndex]["data"][maxPowerIndex])
-      }
-      result.push(
-        {
-          data: chartData,
-          label: `DPM ${maxPowerIndex + 1}`,
-          borderColor: 'transparent',
-          pointBorderColor: 'transparent',
-          pointBackgroundColor: 'transparent',
-          backgroundColor: sensorColors[maxPowerIndex],
-          pointHoverBackgroundColor: 'transparent',
-          pointHoverBorderColor    : 'transparent',
-          fill: true,
-        }
-      )
-    }
-
-    return result
-  }
-  function getMaxPowerData(){
+  function updateChartData(){
     $.ajax({
-      url: "{{ route('max_power') }}",
+      url: "{{ route('chart.max_power') }}",
       success: function(result){
-
-        result.max_power.data.forEach((maxPower, index) => {
-          
-          // Manipulate Cards
-          $(`#max-power-card-value-${index}`).html(maxPower ? maxPower + " kW" : '-' )
-          // End Manipulate Cards
-
-          // Manipulate Chart Data
-          maxPowerChart.data.datasets[index].data.shift()
-          maxPowerChart.data.datasets[index].data.push(maxPower)
-          // End Manipulate Chart Data
-        });
-        
-        // Manipulate Chart Label
-        maxPowerChart.data.labels.shift()
-        maxPowerChart.data.labels.push(result.chart_labels)
-        // End Manipulate Chart
+        let datasets = [] // collect datasets for chart
+        result.data.forEach((value, index) => {
+          datasets.push({
+              data: value,
+              label: `DPM ${index + 1}`,
+              borderColor: 'transparent',
+              pointBorderColor: 'transparent',
+              pointBackgroundColor: 'transparent',
+              backgroundColor: sensorColors[index],
+              pointHoverBackgroundColor: 'transparent',
+              pointHoverBorderColor    : 'transparent',
+              fill: true,
+            })
+        })
 
         // Update Chart
+        maxPowerChart.data.labels = result.labels
+        maxPowerChart.data.datasets = datasets
         maxPowerChart.update()
 
-        $('#total').html(result.max_power.total ? `${result.max_power.total} kW` : "- kW" ) // Update Total
+        $('#total').html(result.total_power ? `${result.total_power} kW` : "- kW" ) // Update Total
       }
     })
   }
+  updateChartData()
   // End Chart
+  
+  // Cards
+  function updateMaxPowerCard(){
+    $.ajax({
+      url: "{{ route('max_power') }}",
+      success: function(result){
+        result.data.forEach((maxPower, index) => {
+          // Manipulate Cards
+          $(`#max-power-card-value-${index}`).html(maxPower ? maxPower + " kW" : '-' )
+        });
+      }
+    })
+  }
+  updateMaxPowerCard()
+  // End Cards
 
   // Datetime
   $('#daterange').daterangepicker({
@@ -241,9 +221,11 @@
   // End Datatable
 
   setInterval(() => {
-    getMaxPowerData()
+    updateMaxPowerCard()
+    updateChartData()
     datatableElement.ajax.reload(false, false)
-  }, 1000 * 60 * 30) // Refresh date after 30 min
+  }, 5000) // Refresh date after 30 min
+  // 1000 * 60 * 30
   
 </script>
 @endsection
